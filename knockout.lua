@@ -1,15 +1,22 @@
 Framework = nil
 local knockedOut = false
 local count = 60
+--local gender
+Framework = exports['qb-core']:GetCoreObject()
 
-Citizen.CreateThread(function()
-    if Config.QBCore == true then
-		while Framework == nil do
-            Framework = exports['qb-core']:GetCoreObject()
-            Citizen.Wait(4)
-        end
-	end
-end)
+-- Citizen.CreateThread(function()
+--     if Config.QBCore == true then
+-- 		while Framework == nil do
+--             Framework = exports['qb-core']:GetCoreObject()
+--             Citizen.Wait(4)
+--         end
+-- 	end
+-- end)
+
+-- AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
+--     local player = Framework.Functions.GetPlayerData()
+--     gender = player.charinfo.gender
+-- end)
 
 Citizen.CreateThread(function()
     while true do
@@ -20,10 +27,12 @@ Citizen.CreateThread(function()
             -- Without any kind of weapon {UNARMED ONLY}
             if (HasPedBeenDamagedByWeapon(myPed, GetHashKey("WEAPON_UNARMED"), 0) )then
                 -- Health to be knocked out
+                --print(GetEntityHealth(myPed))
+                --if (gender == 0 and GetEntityHealth(myPed) < 145) or (gender == 1 and GetEntityHealth(myPed) < 75) then
                 if GetEntityHealth(myPed) < 145 then
                     SetPlayerInvincible(PlayerId(), false)
                     -- Position taken by your Ped
-                    SetPedToRagdoll(myPed, 1000, 1000, 0, 0, 0, 0)
+                    SetPedToRagdoll(myPed, 9000, 9000, 0, 0, 0, 0)
                     --  Effect 
                     ShakeGameplayCam('LARGE_EXPLOSION_SHAKE', 2.5)
                     -- Time to wait
@@ -49,7 +58,17 @@ Citizen.CreateThread(function()
                     end
                     knockedOut = true
                     -- Health after knockout preferably dont make it more than 150 (50 %) because people will abuse with it {No need to go to hospital or so}
-                    SetEntityHealth(myPed, 200)
+                    SetEntityHealth(myPed, 150)
+
+                    --local gender = Framework.Functions.GetPlayerData().charinfo.gender
+                    -- if gender == 0 then
+                    --     -- male
+                    --     SetEntityHealth(myPed, 150)
+                    -- else
+                    --     -- female
+                    --     SetEntityHealth(myPed, 150)
+                    -- end
+
                 end
             end
         end
